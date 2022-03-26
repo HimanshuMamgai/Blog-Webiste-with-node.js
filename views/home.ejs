@@ -1,0 +1,120 @@
+<link rel="icon" href="https://miro.medium.com/max/400/1*tfZa4vsI6UusJYt_fzvGnQ.png">
+
+<div class="container m-5 p-2 text-center bg-light">
+    <h1 id="main-heading">Learn Node js</h1>
+</div>
+
+<hr>
+
+<%- include('partials/header') -%>
+
+<section>
+    <!-- search bar -->
+    <div class="container">
+        <form action="/search" method="post" class="form-inline my-4 my-lg-0">
+            <input class="form-control my-4 mr-sm-2" name="query" id="searchBar" type="search" placeholder="Search your blog" aria-label="Search" style="background-color: #a1f17e; border: 5px solid #2D3338; cursor: pointer;">
+        </form>
+    </div>
+
+</section>
+
+<hr>
+
+<section class="conatiner mb-3 mx-4 p-3" id="post-container">
+
+    <div class="p-3" id="half">
+        <% posts.reverse().forEach((post) => { %>
+            <h3><%= post.title %></h3>
+            <h6 class="opacity-50">Posted on <%= post.date %> by <span id="author">Himanshu</span></h6>
+            <p id="content"><%= post.content.substring(0, 100) + "..." %></p>
+            <a href="/posts/<%= post._id %>">read more</a>
+            <hr>
+        <% }); %>
+    </div>
+    <!-- others -->
+    <div class="p-3" id="others">
+        <div class="container mb-3 p-0 other weather-container"> <!-- openweather map -->
+            <div class="p-3">
+                <h3 class="text-center fw-bolder">Temperature</h3>
+                <div class="d-flex justify-content-center">
+                    <img src="<%= imageUrl %>" alt="temperature-logo" id="weather-logo">
+                    <h6 class="temp mx-3"><%= temp %>&#8451;</h6>
+                    <h6 class="temp"><%= description %></h6>
+                </div>
+            </div>
+        </div>
+        <!-- ***************** -->
+        <!-- Popular post -->
+        <div class="container mb-3 py-3 px-4 other">
+            <h2 class="text-center fw-bolder">Popular Posts</h2>
+            <hr>
+            <% for(var i = 0; i < posts.reverse().length/3; i++) { %>
+                <h5 class="text-center"><%= posts[i].title %></h3>
+                <h6 class="opacity-50 text-center">Posted on <%= posts[i].date %> by <span id="author">Himanshu</span></h6>
+                <p><%= posts[i].content.substring(0, 140) + "..." %></p>
+                <hr>
+            <% } %>
+        </div>
+        <!-- ***************** -->
+        <div class="container py-3 px-4 mb-3 other">
+            <h2 class="text-center fw-bolder">SKILLS</h2>
+            <hr>
+            <h4>Front-End Stack</h4>
+            <div class="container py-3">
+                <button class="btn btn-outline-success me-3">HTML</button>
+                <button class="btn btn-outline-success me-3">DOM</button>
+                <button class="btn btn-outline-success me-3">CSS</button>
+                <button class="btn btn-outline-success me-3">JavaScript</button>
+                <button class="btn btn-outline-success mt-3 me-3">jQuery</button>
+                <button class="btn btn-outline-success mt-3">Bootstrap</button>
+            </div>
+            <hr>
+            <h4>Back-End Stack</h4>
+            <div class="container py-3">
+                <button class="btn btn-outline-success me-3">Node.js</button>
+                <button class="btn btn-outline-success me-3">Express.js</button>
+                <button class="btn btn-outline-success me-3">EJS</button>
+                <button class="btn btn-outline-success me-3">MongoDB</button>
+                <button class="btn btn-outline-success mt-3">Mongoose</button>
+            </div>
+        </div>
+        <div class="container py-3 other">
+            <div id="carouselExampleInterval" class="carousel slide text-center data-bs-ride="carousel">
+                <div class="carousel-inner" id="slider-links">
+                  <div class="carousel-item active" data-bs-interval="10000">
+                    <a href="javascript:void(0)" class="btn btn-outline-light btn-floating m-1 px-3" role="button">
+                        <i class="fab fa-codepen"></i>
+                    </a>
+                    <h4>Visit to codepen</h4>
+                  </div>
+                  <div class="carousel-item" data-bs-interval="2000">
+                    <a href="javascript:void(0)" class="btn btn-outline-light btn-floating m-1 px-3" role="button">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <h4>Visit to Linkedin</h4>
+                  </div>
+                  <div class="carousel-item">
+                    <a href="javascript:void(0)" class="btn btn-outline-light btn-floating m-1 px-3" role="button">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                    <h4>Visit my website</h4>
+                  </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<hr>
+<!-- Api key = 5671c3ea41bfe07eb9028878ede16338 -->
+
+<%- include('partials/footer') -%>

@@ -1,0 +1,25 @@
+<%- include('partials/header') -%>
+
+<div class="container my-3">
+<h1>Contact Me</h1>
+<hr>
+<form action="/contact" method="post">
+    <div class="mb-3">
+      <label for="InputEmail" class="form-label">Email address</label>
+      <input type="email" name="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" placeholder="Enter your email here" required>
+      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    </div>
+    <div class="mb-3">
+      <label for="InputSubject" class="form-label">Subject</label>
+      <input type="text" name="subject" class="form-control" id="InputSubject" aria-describedby="subjectHelp" placeholder="Enter your subject here" required>
+      <div id="subjectHelp" class="form-text">Please enter your subject to make your message more clear.</div>
+    </div>
+    <div class="mb-3">
+        <label for="InputPost" class="form-label">Message</label>
+        <textarea class="form-control" name="message" id="InputPost" rows="7" placeholder="Type your message here..."></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary mb-3">Send</button>
+</form>
+</div>
+
+<%- include('partials/footer') -%>

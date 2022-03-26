@@ -1,0 +1,191 @@
+* {
+    box-sizing: border-box;
+}
+
+#main-heading {
+    color: #417F38;
+    font-style: italic;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px #83BA63;
+}
+
+#navbar {
+    background-color: #2D3338;
+    color: #417F38;
+}
+
+#nav-links li a {
+    color: #6CC248;
+}
+
+#nav-links li a:hover {
+    color: #417F38;
+}
+
+#logo {
+    width: 30px;
+    background: transparent;
+}
+
+footer {
+    color: #83BA63;
+    font-size: 1.2rem;
+    background-color: #2D3338;
+}
+
+.footer-links a {
+    color: #83BA63;
+    border-color: #83BA63;
+    border-radius: 50%;
+    padding: 12px;
+}
+
+.footer-links a:hover {
+    color: #2D3338;
+    border-color: #83BA63;
+    background-color: #83BA63;
+}
+
+#subs-btn {
+    color: #83BA63;
+    border-color: #83BA63;
+}
+
+#subs-btn:hover {
+    color: #2D3338;
+    background-color: #83BA63;
+}
+
+#web_link {
+    color: #448834;
+}
+
+#dropdown-link li a{
+    color: #417F38;
+    font-weight: bold;
+}
+
+#about {
+    height: 50vh;
+}
+
+#user-image {
+    float: left;
+    width: 150px;
+    border: 3px solid #448834;
+}
+
+#author {
+    color: red;
+    opacity: 1;
+    cursor: pointer;
+}
+
+#post-container {
+    display: flex;
+    justify-content: space-between;
+    color: #6CC248;
+    background-color: #2D3338;
+    border-radius: 3px;
+}
+
+#half {
+    width: 50%;
+}
+
+#others {
+    background-color: #6CC248;
+    color: #2D3338;
+    width: 45%;
+    border-radius: 5px;
+}
+
+.other {
+    color: #6CC248;
+    background-color: #2D3338;
+    border-radius: 8px;
+}
+
+#mern {
+    width: 80%;
+    max-height: 100%;
+}
+
+.slide-images {
+    width: 60%;
+    max-height: 100%;
+}
+
+#slider-links div a {
+    color: #83BA63;
+    border-color: #83BA63;
+    border-radius: 50%;
+    padding: 12px;
+    /* float: left; */
+}
+
+#slider-links div a:hover {
+    color: #2D3338;
+    border-color: #83BA63;
+    background-color: #83BA63;
+}
+
+#main-post {
+    width: 60%;
+}
+
+#post-viewer {
+    display: flex;
+}
+
+#other-post {
+    width: 40%;
+    border: 10px solid #448834;
+    border-radius: 8px;
+    height: 65vh;
+    overflow-y: scroll;
+}
+
+#half #content {
+    display: inline;
+}
+
+#other-post-links {
+    text-decoration: none;
+}
+
+#other-post-links #link-title, .link-content {
+    color: black;
+}
+
+#other-post::-webkit-scrollbar {
+    width: 10px;
+}
+
+#other-post::-webkit-scrollbar-track {
+    background: #2D3338;
+    border-radius: 8px;
+}
+
+#other-post::-webkit-scrollbar-thumb {
+    background: #6CC248; 
+    border-radius: 8px;
+}
+
+#other-post::-webkit-scrollbar-thumb:hover {
+    background: #417F38; 
+}
+
+.weather-container .temp {
+    font-size: 2.3rem;
+}
+
+.weather-container #weather-logo {
+    background-color: #fff;
+    border-radius: 50%;
+    width: 50px;
+}
+
+#searchBar::placeholder {
+    background-color: #a1f17e;
+}

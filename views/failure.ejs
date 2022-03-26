@@ -1,0 +1,14 @@
+<%- include('partials/header') -%>
+
+<div class="container my-5">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading"><i class="fas fa-exclamation-triangle ms-0 me-2"></i>Oops!</h4>
+        <hr>
+        <p><%= message %></p>
+        <form action="/failure" method="post">
+            <button type="submit" class="btn btn-warning" id="try">Try Again</button>
+        </form>
+    </div>
+</div>
+
+<%- include('partials/footer') -%>
