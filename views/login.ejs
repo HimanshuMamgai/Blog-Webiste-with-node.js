@@ -1,0 +1,37 @@
+<%- include("partials/header") -%>
+
+<div class="container p-5">
+    <div class="row align-item-start">
+        <div class="col">
+            <h1 id="main-heading">nodeBlog</h1>
+            <p id="main-para">Welcome to nodeBlog, just login or signup to create amazing post.</p>
+        </div>
+        <div class="col-md-5">
+            <div class="container p-3" id="login-container">
+                <form action="/login" method="post">
+                    <input type="email" name="email" class="form-control mb-3" placeholder="Enter email address">
+                    <input type="password" name="password" class="form-control" placeholder="Password">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn mt-3" id="login-btn">Log In</button>
+                    </div>
+                </form>
+                <h5 class="text-center">or</h5>
+                <form action="/auth/google" method="post">
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fab fa-google"></i> Signup with Google
+                        </button>
+                    </div>
+                </form>
+                <hr>
+                <form action="/singup" method="post">
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <button type="submit" class="btn" id="create-btn">Create new account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include("partials/footer") -%>
