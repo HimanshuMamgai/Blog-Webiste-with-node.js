@@ -1,12 +1,13 @@
 <link rel="icon" href="https://miro.medium.com/max/400/1*tfZa4vsI6UusJYt_fzvGnQ.png">
 <%- include('partials/header'); -%>
 
-<section class="container p-5">
+<section class="container p-4">
 <div class="row align-items-start">
     <div class="col">
         <h1><%= title %></h1>
         <h6 class="opacity-50">Posted on <%= date %> by <span id="author">Himanshu</span></h6>
-        <p><%= content %></p>
+        <img src="data:image/png;base64,<%= image %>" alt="image" class="uploadedImage me-2"/>
+        <div class="preserve-whitespace"><%= content %></div>
     </div>
 
     <div class="col-md-5 col-12">
@@ -14,7 +15,7 @@
             <h3 class="text-center display-4">Other Posts</h3>
             <hr>
             <% posts.forEach((post) => { %>
-                <a href="/posts/<%= post._id %>" id="other-post-links">
+                <a href="/posts/<%= post._id %>" id="other-post-links"> 
                     <h3 id="link-title" class="text-center"><%= post.title %></h3>
                     <h6 class="opacity-50 text-center" style="color:black">Posted on <%= post.date %> by <span id="author">Himanshu</span></h6>
                     <p id="content" class="link-content"><%= post.content.substring(0, 97) + "..." %></p>

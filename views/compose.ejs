@@ -3,7 +3,11 @@
 <div class="container my-3">
 <h1>Compose</h1>
 <hr>
-<form action="/compose" method="post">
+<form action="/compose" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="InputFile" class="form-label">Image</label>
+      <input type="file" name="image" class="form-control">
+    </div>
     <div class="mb-3">
       <label for="InputTitle" class="form-label">Title</label>
       <input type="text" name="title" class="form-control" id="InputTitle" placeholder="Enter your post title here" required>

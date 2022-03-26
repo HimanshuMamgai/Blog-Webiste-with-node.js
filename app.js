@@ -3,11 +3,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const https = require('https');
 const mongoose = require('mongoose');
+const upload = require("express-fileupload");
 const date = require(__dirname + '/date.js');
 
 const app = express();
 
 app.use(express.static('public'));
+
+app.use(upload());
 
 app.use(bodyParser.urlencoded({extended : true}));
 
@@ -39,7 +42,8 @@ const Contact = mongoose.model("Contact", contactSchema);
 const postSchema = new mongoose.Schema({
     title : String,
     date : String,
-    content : String
+    content : String,
+    img: String
 });
 
 // post model
@@ -90,15 +94,18 @@ app.get(["/compose", "/posts/compose"], (req, res) => {
 app.post("/compose", (req, res) => {
     let day = date.getDate();
 
-    const post = new Post({
-        title : req.body.title,
-        date : day,
-        content : req.body.content
-    });
-    post.save((err) => {
-        if(err) throw err;
-        res.redirect("/");
-    });
+    if(req.files) {
+        const post = new Post({
+            img: req.files.image.data.toString("base64"),
+            title : req.body.title,
+            date : day,
+            content : req.body.content
+        });
+        post.save((err) => {
+            if(err) throw err;
+            res.redirect("/");
+        });
+    }
 });
 
 app.get("/posts/:postId", (req, res) => {
@@ -107,7 +114,7 @@ app.get("/posts/:postId", (req, res) => {
         if(err) throw err;
         Post.find({ _id: { $nin: [requestPostId] }}, (err, posts) => { //to exclude only one document
             if(err) throw err;
-            res.render("post", {title : post.title, date : post.date, content : post.content, posts : posts});
+            res.render("post", {image: post.img,title : post.title, date : post.date, content : post.content, posts : posts});
         });
     });
 });

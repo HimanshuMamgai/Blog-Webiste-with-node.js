@@ -7,6 +7,31 @@
     margin: 0;
 }
 
+.displayImage {
+    width: 20vw;
+    float: left;
+}
+
+.preserve-whitespace {
+    word-break: break-all;
+    white-space: pre-wrap;
+}
+
+.uploadedImage {
+    width: 48vw;
+}
+
+#author {
+    color: #3c873a;
+    opacity: 1;
+}
+
+.read-link {
+    color: #3c873a;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 .other-post {
     border: 3px solid black;
     border-radius: 8px;
