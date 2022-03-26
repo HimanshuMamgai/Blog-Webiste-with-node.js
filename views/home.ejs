@@ -20,7 +20,7 @@
 
 <hr>
 
-<section class="conatiner mb-3 mx-4 p-3" id="post-container">
+<section class="container mb-3 mx-4 p-3" id="post-container">
 
     <div class="p-3" id="half">
         <% posts.reverse().forEach((post) => { %>
@@ -32,20 +32,9 @@
         <% }); %>
     </div>
     <!-- others -->
-    <div class="p-3" id="others">
-        <div class="container mb-3 p-0 other weather-container"> <!-- openweather map -->
-            <div class="p-3">
-                <h3 class="text-center fw-bolder">Temperature</h3>
-                <div class="d-flex justify-content-center">
-                    <img src="<%= imageUrl %>" alt="temperature-logo" id="weather-logo">
-                    <h6 class="temp mx-3"><%= temp %>&#8451;</h6>
-                    <h6 class="temp"><%= description %></h6>
-                </div>
-            </div>
-        </div>
-        <!-- ***************** -->
+    <div class="p-3">
         <!-- Popular post -->
-        <div class="container mb-3 py-3 px-4 other">
+        <div class="container mb-3 py-3 px-4 other" id="others">
             <h2 class="text-center fw-bolder">Popular Posts</h2>
             <hr>
             <% for(var i = 0; i < posts.reverse().length/3; i++) { %>
@@ -65,7 +54,7 @@
                 <button class="btn btn-outline-success me-3">DOM</button>
                 <button class="btn btn-outline-success me-3">CSS</button>
                 <button class="btn btn-outline-success me-3">JavaScript</button>
-                <button class="btn btn-outline-success mt-3 me-3">jQuery</button>
+                <button class="btn btn-outline-success me-3">jQuery</button>
                 <button class="btn btn-outline-success mt-3">Bootstrap</button>
             </div>
             <hr>

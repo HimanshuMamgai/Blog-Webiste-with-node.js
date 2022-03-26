@@ -96,7 +96,6 @@ footer {
 #others {
     background-color: #6CC248;
     color: #2D3338;
-    width: 45%;
     border-radius: 5px;
 }
 
@@ -176,14 +175,8 @@ footer {
     background: #417F38; 
 }
 
-.weather-container .temp {
+.temp {
     font-size: 2.3rem;
-}
-
-.weather-container #weather-logo {
-    background-color: #fff;
-    border-radius: 50%;
-    width: 50px;
 }
 
 #searchBar::placeholder {
