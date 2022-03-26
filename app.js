@@ -53,10 +53,6 @@ app.get("/", (req, res) => {
     });
 });
 
-app.get("/public/image/profile.jpg", (req, res) => {
-    
-});
-
 /* About Page */
 app.get(["/about", "/posts/about"], (req, res) => {
     res.render("about");
@@ -80,6 +76,10 @@ app.post("/contact", (req, res) => {
         res.sendFile(__dirname + "/message.html");
     });
 
+});
+
+app.get("/login", (req, res) => {
+    res.render("login");
 });
 
 /* Compose post */
