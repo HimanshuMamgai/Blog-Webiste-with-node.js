@@ -49,22 +49,12 @@ const Post = mongoose.model("Post", postSchema);
 app.get("/", (req, res) => {
 
     Post.find({}, (err, posts) => {
-
-        if(err) throw err;
-        const url = "https://api.openweathermap.org/data/2.5/weather?q=delhi&appid=5671c3ea41bfe07eb9028878ede16338&units=metric";
-
-        https.get(url, function(response) {
-
-            response.on("data", (data) => {
-                const weatherData = JSON.parse(data);
-                const temp = Math.floor(weatherData.main.temp);
-                const description = weatherData.weather[0].main;
-                const weatherIcon = weatherData.weather[0].icon;
-                const imageUrl = "https://openweathermap.org/img/wn/" + weatherIcon + "@2x.png";
-                res.render("home", {posts: posts, temp : temp, description : description, imageUrl : imageUrl});
-            });
-        });
+        res.render("home", {posts: posts});
     });
+});
+
+app.get("/public/image/profile.jpg", (req, res) => {
+    
 });
 
 /* About Page */
@@ -155,11 +145,11 @@ app.post("/subscribe", (req, res) => {
 
     const jsonData = JSON.stringify(data);
 
-    const url = "https://us5.api.mailchimp.com/3.0/lists/5c6ad220a7";
+    const url = process.env.MAIL_CHIMP_URI;
 
     const options = {
         method : "POST",
-        auth : "himanshu1:c94e0afc5c1b2b1a88d6d7f7551f2765-us5"
+        auth : "himanshu1:" + process.env.MAIL_CHIMP_API_KEY
     }
 
     const request = https.request(url, options, (response) => {
