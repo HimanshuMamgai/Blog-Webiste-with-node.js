@@ -33,14 +33,17 @@
 }
 
 .other-post {
-    border: 3px solid black;
+    border: 8px solid #3c873a;
     border-radius: 8px;
-    color: #3c873a;
 }
 
 #other-post-links {
     text-decoration: none;
     color: black;
+}
+
+.post-heading {
+    color: #3c873a;
 }
 
 #about img {

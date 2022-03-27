@@ -5,6 +5,12 @@ const https = require('https');
 const mongoose = require('mongoose');
 const upload = require("express-fileupload");
 const date = require(__dirname + '/date.js');
+const aws = require('aws-sdk');
+
+let s3 = new aws.S3({
+  accessKeyId: process.env.S3_KEY,
+  secretAccessKey: process.env.S3_SECRET
+});
 
 const app = express();
 
@@ -191,6 +197,6 @@ app.post("/failure", (req, res) => {
     res.redirect("/");
 });
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
     console.log("Server is running on port: 3000");
 });

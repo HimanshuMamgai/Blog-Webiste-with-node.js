@@ -1,7 +1,11 @@
 <link rel="icon" href="https://miro.medium.com/max/400/1*tfZa4vsI6UusJYt_fzvGnQ.png" type="image/favicon">
 
 <div class="container p-5 text-center">
-    <h1 class="display-5 text-success"><strong>Node Blog</strong></h1>
+    <h1 class="display-2 text-success fw-bolder">
+        <strong>
+            Node Blog
+        </strong>
+    </h1>
 </div>
 
 <hr>
@@ -15,22 +19,20 @@
                 <h3><%= post.title %></h3>
                 <h6 class="opacity-50">Posted on <%= post.date %> by <span id="author">Himanshu</span></h6>
                 <img src="data:image/png;base64,<%= post.img %>" alt="image" class="displayImage me-2"/>
-                <p id="content"><%= post.content.substring(0, 300) + "... " %><a href="/posts/<%= post._id %>" class="read-link">Read More</a></p>
+                <p id="content"><%= post.content.substring(0, 345) + "... " %><a href="/posts/<%= post._id %>" class="read-link">Read More</a></p>
                 <hr>
             <% }); %>
         </div>
         <div class="col">
-            <div class="container p-3 other-post">
-                <h3 class="text-center display-5">Popular post</h3>
+            <div class="container p-3 other-post" id="other-post-links">
+                <h3 class="text-center text-success display-4 fw-bolder">Popular post</h3>
                 <hr>
-                <a href="/<%= posts._id %>" id="other-post-links">
                 <% for(var i = 0; i < posts.reverse().length/3; i++) { %>
                     <h5 class="text-center"><%= posts[i].title %></h3>
                     <h6 class="opacity-50 text-center">Posted on <%= posts[i].date %> by <span id="author">Himanshu</span></h6>
-                    <p><%= posts[i].content.substring(0, 180) + "... " %><span class="read-link">Read More</span></p>
+                    <p><%= posts[i].content.substring(0, 180) + "... " %><a href="/posts/<%= posts[i]._id %>" class="read-link">Read More</a></p>
                     <hr>
                 <% } %>
-                </a>
             </div>
         </div>
     </div>
