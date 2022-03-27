@@ -116,4 +116,7 @@
     #about img {
         width: 40vw;
     }
+    #subs-btn {
+        margin-top: 10px;
+    }
 }
