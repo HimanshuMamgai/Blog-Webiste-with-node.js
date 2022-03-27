@@ -9,7 +9,6 @@
         <img src="data:image/png;base64,<%= image %>" alt="image" class="uploadedImage me-2"/>
         <div class="preserve-whitespace"><%= content %></div>
     </div>
-
     <div class="col-md-5 col-12">
         <div class="container p-3 other-post">
             <h3 class="text-center display-4 text-success fw-bolder">Other Posts</h3>
@@ -20,14 +19,11 @@
                     <h6 class="opacity-50 text-center" style="color:black">Posted on <%= post.date %> by <span id="author">Himanshu</span></h6>
                     <p id="content" class="link-content"><%= post.content.substring(0, 97) + "..." %></p>
                 </a>
+                <hr>
             <% }); %>
         </div>
     </div>
 </div>
 </section>
-
-<hr>
-
-
 
 <%- include('partials/footer'); -%>
