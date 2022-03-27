@@ -14,9 +14,9 @@
 
 <div class="container py-4 px-0">
     <div class="row align-items-start">
-        <div class="col">
+        <div class="col" id="post-container">
             <% posts.reverse().forEach((post) => { %>
-                <h3><%= post.title %></h3>
+                <h3 id="display-post-heading"><%= post.title %></h3>
                 <h6 class="opacity-50">Posted on <%= post.date %> by <span id="author">Himanshu</span></h6>
                 <img src="data:image/png;base64,<%= post.img %>" alt="image" class="displayImage me-2"/>
                 <p id="content"><%= post.content.substring(0, 345) + "... " %><a href="/posts/<%= post._id %>" class="read-link">Read More</a></p>

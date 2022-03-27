@@ -12,6 +12,10 @@
     float: left;
 }
 
+#display-post-heading {
+    clear: both;
+}
+
 .preserve-whitespace {
     word-break: break-all;
     white-space: pre-wrap;
@@ -19,6 +23,7 @@
 
 .uploadedImage {
     width: 48vw;
+    height: 48vh;
 }
 
 #author {
