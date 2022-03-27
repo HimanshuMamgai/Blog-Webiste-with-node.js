@@ -2,6 +2,10 @@
     box-sizing: border-box;
 }
 
+.heading {
+    color: #3c873a;
+}
+
 #navbar-logo {
     width: 25px;
     margin: 0;
@@ -19,6 +23,7 @@
 .preserve-whitespace {
     word-break: break-all;
     white-space: pre-wrap;
+    clear: both;
 }
 
 .uploadedImage {
@@ -54,7 +59,9 @@
 #about img {
     float: left;
     border: 2px solid #3c873a;
-    border-radius: 20%;
+    width: 13vw;
+    height: 25vh;
+    border-radius: 100%;
 }
 
 .footer-link {
@@ -88,4 +95,25 @@
 
 #login-btn:hover, #create-btn:hover {
     background-color: #287925;
+}
+
+#links {
+    display: none;
+}
+
+@media only screen and (max-width: 750px) {
+    ul {
+        margin: auto;
+    }
+    .displayImage {
+        width: 40vw;
+        float: none;
+    }
+    .uploadedImage {
+        width: 60vw;
+        height: 48vh;
+    }
+    #about img {
+        width: 40vw;
+    }
 }

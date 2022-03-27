@@ -68,6 +68,10 @@ app.get(["/about", "/posts/about"], (req, res) => {
     res.render("about");
 });
 
+app.post("/message", (req, res) => {
+    res.redirect("/");
+});
+
 /* Contact Page */
 app.get(["/contact", "/posts/contact"], (req, res) => {
     res.render("contact");
