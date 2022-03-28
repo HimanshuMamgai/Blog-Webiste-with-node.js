@@ -29,7 +29,7 @@
                 <hr>
                 <% for(var i = 0; i < posts.reverse().length/2; i++) { %>
                     <h5 class="text-center"><%= posts[i].title %></h3>
-                    <h6 class="opacity-50 text-center">Posted on <%= posts[i].date %> by <span id="author">Himanshu</span></h6>
+                    <h6 class="opacity-50 text-center">Posted on <%= posts[i].date %> by <span id="author"><%= posts[i].author %></span></h6>
                     <p><%= posts[i].content.substring(0, 180) + "... " %><a href="/posts/<%= posts[i]._id %>" class="read-link">Read More</a></p>
                     <hr>
                 <% } %>

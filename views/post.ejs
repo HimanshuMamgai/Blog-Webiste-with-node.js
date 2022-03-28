@@ -5,7 +5,7 @@
 <div class="row align-items-start">
     <div class="col">
         <h1><%= title %></h1>
-        <h6 class="opacity-50">Posted on <%= date %> by <span id="author">Himanshu</span></h6>
+        <h6 class="opacity-50">Posted on <%= date %> by <span id="author"><%= author %></span></h6>
         <img src="data:image/png;base64,<%= image %>" alt="image" class="img-fluid uploadedImage me-2"/>
         <div class="preserve-whitespace"><%= content %></div>
     </div>
@@ -16,7 +16,7 @@
             <% posts.forEach((post) => { %>
                 <a href="/posts/<%= post._id %>" id="other-post-links"> 
                     <h3 id="link-title" class="text-center"><%= post.title %></h3>
-                    <h6 class="opacity-50 text-center" style="color:black">Posted on <%= post.date %> by <span id="author">Himanshu</span></h6>
+                    <h6 class="opacity-50 text-center" style="color:black">Posted on <%= post.date %> by <span id="author"><%= post.author %></span></h6>
                     <p id="content" class="link-content"><%= post.content.substring(0, 97) + "..." %></p>
                 </a>
                 <hr>

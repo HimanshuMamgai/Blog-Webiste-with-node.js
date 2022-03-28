@@ -149,24 +149,8 @@ app.get("/posts/:postId", (req, res) => {
         if(err) throw err;
         Post.find({ _id: { $nin: [requestPostId] }}, (err, posts) => { //to exclude only one document
             if(err) throw err;
-            res.render("post", {image: post.img,title : post.title, date : post.date, content : post.content, posts : posts});
+            res.render("post", {image: post.img,title : post.title, date : post.date, author: post.author, content : post.content, posts : posts});
         });
-    });
-});
-
-/* Search bar */
-app.post("/search", (req, res) => {
-    const query = req.body.query;
-    Post.findOne({title: {$regex : query, $options : "$i"}}, (err, post) => { //gives single object
-        if(err) throw err;
-        if(post != null) { //if no query found
-            Post.find({ _id: { $nin: [post._id] }}, (err, posts) => { //gives array of object
-                if(err) throw err;
-                res.render("post", {title : post.title, date : post.date, content : post.content, posts : posts});
-            });
-        } else { //gives message rather than error
-            res.render("failure", {message : `Your search - "${query}" - did not match any documents.`});
-        }
     });
 });
 
