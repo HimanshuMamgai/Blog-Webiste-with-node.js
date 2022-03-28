@@ -4,15 +4,9 @@ const https = require('https');
 const mongoose = require('mongoose');
 const upload = require("express-fileupload");
 const date = require(__dirname + '/date.js');
-const aws = require('aws-sdk');
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require('passport-local-mongoose');
-
-let s3 = new aws.S3({
-  accessKeyId: process.env.S3_KEY,
-  secretAccessKey: process.env.S3_SECRET
-});
 
 const app = express();
 
@@ -148,7 +142,6 @@ app.post("/compose", (req, res) => {
         });
     }
 });
-
 
 app.get("/posts/:postId", (req, res) => {
     const requestPostId = req.params.postId;
