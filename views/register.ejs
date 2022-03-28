@@ -1,0 +1,16 @@
+<%- include("partials/header") -%>
+
+<div class="container p-5 text-center">
+    <h1 id="main-heading">nodeBlog</h1>
+    <div class="container p-3 mt-4" id="register-form-container">
+        <span id="error-message" class="mb-2"><strong><%= message %></strong></span>
+        <form action="/register" method="post">
+            <input type="email" name="email" class="form-control mb-3" placeholder="Enter your email address">
+            <input type="text" name="username" class="form-control mb-3" placeholder="Create a username">
+            <input type="password" name="password" class="form-control" placeholder="Create a new password">
+            <button type="submit" class="btn btn-success mt-3">Register</button>
+        </form>
+    </div>
+</div>
+
+<%- include("partials/footer") -%>

@@ -101,6 +101,18 @@
     display: none;
 }
 
+#error-message {
+    color: black;
+    float: left;
+}
+#register-form-container {
+    width: 50vw;
+    border: 3px solid #3c873a;
+    border-radius: 5%;
+    box-shadow: 0 1px 2px 1px gray;
+    background-image: linear-gradient(to bottom, #3c873a, rgb(231, 228, 228));
+}
+
 @media only screen and (max-width: 750px) {
     ul {
         margin: auto;

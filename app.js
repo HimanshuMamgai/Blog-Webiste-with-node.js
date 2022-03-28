@@ -1,11 +1,13 @@
 require("dotenv").config();
 const express = require('express');
-const bodyParser = require('body-parser');
 const https = require('https');
 const mongoose = require('mongoose');
 const upload = require("express-fileupload");
 const date = require(__dirname + '/date.js');
 const aws = require('aws-sdk');
+const session = require("express-session");
+const passport = require("passport");
+const passportLocalMongoose = require('passport-local-mongoose');
 
 let s3 = new aws.S3({
   accessKeyId: process.env.S3_KEY,
@@ -18,13 +20,40 @@ app.use(express.static('public'));
 
 app.use(upload());
 
-app.use(bodyParser.urlencoded({extended : true}));
+app.use(express.urlencoded({extended : true}));
 
 app.set('view engine', 'ejs');
+
+app.use(session({
+    secret: "Our little secret",
+    resave: false,
+    saveUninitialized: false
+}));
+
+//to use req. features
+app.use(passport.initialize());
+app.use(passport.session());
 
 const db_url = process.env.DB_URL;
 
 mongoose.connect(db_url, {useNewUrlParser: true});
+
+// user 
+const userSchema = new mongoose.Schema({
+    email: String,
+    username: String,
+    password: String
+});
+
+userSchema.plugin(passportLocalMongoose);
+
+const User = mongoose.model("User", userSchema);
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+const LocalStrategy = require('passport-local').Strategy;
+passport.use(new LocalStrategy(User.authenticate()));
 
 /* Contact form schema */
 const contactSchema = new mongoose.Schema({
@@ -49,7 +78,8 @@ const postSchema = new mongoose.Schema({
     title : String,
     date : String,
     content : String,
-    img: String
+    img: String,
+    author: String
 });
 
 // post model
@@ -91,13 +121,14 @@ app.post("/contact", (req, res) => {
     });
 });
 
-app.get("/login", (req, res) => {
-    res.render("login");
-});
-
 /* Compose post */
-app.get(["/compose", "/posts/compose"], (req, res) => {
-    res.render("compose");
+app.get("/compose", (req, res) => {
+    if(req.isAuthenticated()) {
+        console.log(req.user.username);
+        res.render("compose");
+    } else {
+        res.redirect("/login");
+    }
 });
 
 app.post("/compose", (req, res) => {
@@ -108,7 +139,8 @@ app.post("/compose", (req, res) => {
             img: req.files.image.data.toString("base64"),
             title : req.body.title,
             date : day,
-            content : req.body.content
+            content : req.body.content,
+            author: req.user.username
         });
         post.save((err) => {
             if(err) throw err;
@@ -116,6 +148,7 @@ app.post("/compose", (req, res) => {
         });
     }
 });
+
 
 app.get("/posts/:postId", (req, res) => {
     const requestPostId = req.params.postId;
@@ -184,6 +217,57 @@ app.post("/subscribe", (req, res) => {
     request.write(jsonData); //to send data on mailchimp
     request.end();
 
+});
+
+app.get("/logout", (req, res) => {
+    req.logOut();
+    res.redirect("/login");
+});
+
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+app.get("/register", (req, res) => {
+    res.render("register", {message: ""});
+});
+
+app.post("/register", (req, res) => {
+    User.register({email: req.body.email, username: req.body.username}, req.body.password, (err, user) => {
+        if (err) {
+            console.log(err.message);
+            res.render("register", {message: err.message});
+        } else {
+            passport.authenticate("local")(req, res, function() {
+                res.redirect("/compose");
+            });
+        }
+    })
+});
+
+app.post("/login", (req, res) => {
+    const user = new User({
+        username: req.body.username,
+        password: req.body.password
+    });
+
+    req.login(user, (err) => {
+        if(err) {
+            console.log(err);
+            res.redirect("/register");
+        } else {
+            User.findOne({"username": req.user.username}, (err, foundUser) => {
+                if(!foundUser) {
+                    console.log("Please regsiter yourself to view secret page.");
+                    res.redirect("/register");
+                } else {
+                    passport.authenticate("local")(req, res, function() {
+                        res.redirect("/compose");
+                    });
+                }
+            });
+        }
+    });
 });
 
 app.get("/message", (req, res) => {
