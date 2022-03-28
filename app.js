@@ -69,7 +69,7 @@ app.get(["/about", "/posts/about"], (req, res) => {
 });
 
 app.post("/message", (req, res) => {
-    res.redirect("/");
+    res.redirect("https://realtimechatapplication24.herokuapp.com/");
 });
 
 /* Contact Page */
@@ -89,7 +89,6 @@ app.post("/contact", (req, res) => {
         if(err) throw err;
         res.sendFile(__dirname + "/message.html");
     });
-
 });
 
 app.get("/login", (req, res) => {
