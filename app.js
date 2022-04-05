@@ -7,6 +7,8 @@ const date = require(__dirname + '/date.js');
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require('passport-local-mongoose');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const findOrCreate = require("mongoose-findorcreate");
 
 const app = express();
 
@@ -40,6 +42,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(findOrCreate);
 
 const User = mongoose.model("User", userSchema);
 
@@ -48,6 +51,19 @@ passport.deserializeUser(User.deserializeUser());
 
 const LocalStrategy = require('passport-local').Strategy;
 passport.use(new LocalStrategy(User.authenticate()));
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/google/compose",
+    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
 
 /* Contact form schema */
 const contactSchema = new mongoose.Schema({
@@ -81,7 +97,6 @@ const Post = mongoose.model("Post", postSchema);
 
 // Home page
 app.get("/", (req, res) => {
-
     Post.find({}, (err, posts) => {
         res.render("home", {posts: posts});
     });
@@ -154,6 +169,20 @@ app.get("/posts/:postId", (req, res) => {
     });
 });
 
+app.get("/post", (req, res) => {
+    if(req.isAuthenticated()) {
+    Post.find({}, (err, posts) => {
+        if(err) {
+            console.log(err);
+        } else {
+            res.render("result", {posts: posts});
+        }
+    });
+    } else {
+        res.redirect("/login");
+    }
+});
+
 /* Newsletter */
 app.post("/subscribe", (req, res) => {
     let userEmail = req.body.email;
@@ -199,6 +228,16 @@ app.post("/subscribe", (req, res) => {
 app.get("/logout", (req, res) => {
     req.logOut();
     res.redirect("/login");
+});
+
+app.get("/auth/google",
+    passport.authenticate("google", { scope: ["profile"] }));
+
+app.get("/auth/google/compose", 
+passport.authenticate("google", { failureRedirect: "/login" }),
+function(req, res) {
+    // Successful authentication, redirect secret.
+    res.redirect("/compose");
 });
 
 app.get("/login", (req, res) => {

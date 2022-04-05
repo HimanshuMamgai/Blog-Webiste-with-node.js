@@ -117,6 +117,11 @@
     background-image: linear-gradient(to bottom, #3c873a, rgb(231, 228, 228));
 }
 
+table, th, tr, td {
+    border: 2px solid black;
+    border-collapse: collapse;
+}
+
 @media only screen and (max-width: 750px) {
     ul {
         margin: auto;
@@ -137,5 +142,8 @@
     }
     #other-post-container {
         margin-top: 20px;
+    }
+    #register-form-container {
+        width: auto;
     }
 }
