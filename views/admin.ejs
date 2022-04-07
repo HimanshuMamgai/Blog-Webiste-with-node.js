@@ -1,0 +1,15 @@
+<%- include("partials/header") -%>
+
+<div class="container p-5 text-center">
+    <h1 id="main-heading">nodeBlog: Admin</h1>
+    <div class="container p-3 mt-4" id="register-form-container">
+        <span id="error-message" class="mb-2"><strong><%= message %></strong></span>
+        <form action="/auth/admin" method="post">
+            <input type="text" name="username" class="form-control mb-3" placeholder="Create a username">
+            <input type="password" name="password" class="form-control" placeholder="Create a new password">
+            <button type="submit" class="btn btn-success mt-3">Login</button>
+        </form>
+    </div>
+</div>
+
+<%- include("partials/footer") -%>

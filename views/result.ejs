@@ -1,19 +1,24 @@
 <%- include('partials/header'); -%>
 
-<div class="container p-5">
-    <table class="p-2">
-        <tr class="text-center">
-            <th>Title</th>
-            <th>Date</th>
-            <th>User</th>
-            <th>Action</th>
+<div class="container p-5 d-block m-auto">
+    <table class="p-2 border-5 border-success">
+        <tr class="text-center border">
+            <th class="border">Title</th>
+            <th class="border">Date</th>
+            <th class="border">User</th>
+            <th class="border" colspan="2">Action</th>
         </tr>
         <% posts.forEach((post) => { %>
-            <tr>
-                <td><%= post.title %></td>
-                <td><%= post.date %></td>
-                <td class="text-center"><%= post.author %></td>
-                <td></td>
+            <tr class="border text-center">
+                <td class="border px-3"><%= post.title %></td>
+                <td class="border px-3"><%= post.date %></td>
+                <td class="border px-3"><%= post.author %></td>
+                <td class="border px-3">
+                    <a href="/delete">
+                        <i class="fa fa-trash-o del"></i>
+                    </a>
+                </td>
+                <td class="border px-3"><i class="fa fa-pencil edit"></i></td>
             </tr>
         <% }); %>
     </table>

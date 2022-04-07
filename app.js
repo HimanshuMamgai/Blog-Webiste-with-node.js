@@ -3,12 +3,13 @@ const express = require('express');
 const https = require('https');
 const mongoose = require('mongoose');
 const upload = require("express-fileupload");
-const date = require(__dirname + '/date.js');
+const date = require(__dirname + "/date.js");
 const session = require("express-session");
 const passport = require("passport");
-const passportLocalMongoose = require('passport-local-mongoose');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const findOrCreate = require("mongoose-findorcreate");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const User = require("./models/User");
+const Contact = require("./models/Contact");
+const Post = require("./models/Post");
 
 const app = express();
 
@@ -20,8 +21,10 @@ app.use(express.urlencoded({extended : true}));
 
 app.set('view engine', 'ejs');
 
+const secret = process.env.SECRET;
+
 app.use(session({
-    secret: "Our little secret",
+    secret: secret,
     resave: false,
     saveUninitialized: false
 }));
@@ -33,18 +36,6 @@ app.use(passport.session());
 const db_url = process.env.DB_URL;
 
 mongoose.connect(db_url, {useNewUrlParser: true});
-
-// user 
-const userSchema = new mongoose.Schema({
-    email: String,
-    username: String,
-    password: String
-});
-
-userSchema.plugin(passportLocalMongoose);
-userSchema.plugin(findOrCreate);
-
-const User = mongoose.model("User", userSchema);
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -65,36 +56,6 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-/* Contact form schema */
-const contactSchema = new mongoose.Schema({
-    email : {
-        type : String,
-        required : [true, "Please enter your email for contacting!"]
-    },
-    subject : {
-        type : String,
-        required : true
-    },
-    message : String
-});
-
-// contact form model
-const Contact = mongoose.model("Contact", contactSchema);
-
-//*************************************************************************************
-
-// post schema
-const postSchema = new mongoose.Schema({
-    title : String,
-    date : String,
-    content : String,
-    img: String,
-    author: String
-});
-
-// post model
-const Post = mongoose.model("Post", postSchema);
-
 // Home page
 app.get("/", (req, res) => {
     Post.find({}, (err, posts) => {
@@ -107,7 +68,7 @@ app.get(["/about", "/posts/about"], (req, res) => {
     res.render("about");
 });
 
-app.post("/message", (req, res) => {
+app.get("/message", (req, res) => {
     res.redirect("https://realtimechatapplication24.herokuapp.com/");
 });
 
@@ -167,20 +128,6 @@ app.get("/posts/:postId", (req, res) => {
             res.render("post", {image: post.img,title : post.title, date : post.date, author: post.author, content : post.content, posts : posts});
         });
     });
-});
-
-app.get("/post", (req, res) => {
-    if(req.isAuthenticated()) {
-    Post.find({}, (err, posts) => {
-        if(err) {
-            console.log(err);
-        } else {
-            res.render("result", {posts: posts});
-        }
-    });
-    } else {
-        res.redirect("/login");
-    }
 });
 
 /* Newsletter */
@@ -249,7 +196,7 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-    User.register({email: req.body.email, username: req.body.username}, req.body.password, (err, user) => {
+    User.register({email: req.body.email, username: req.body.username, role: "basic"}, req.body.password, (err) => {
         if (err) {
             console.log(err.message);
             res.render("register", {message: err.message});
@@ -274,7 +221,6 @@ app.post("/login", (req, res) => {
         } else {
             User.findOne({"username": req.user.username}, (err, foundUser) => {
                 if(!foundUser) {
-                    console.log("Please regsiter yourself to view secret page.");
                     res.redirect("/register");
                 } else {
                     passport.authenticate("local")(req, res, function() {
@@ -284,6 +230,63 @@ app.post("/login", (req, res) => {
             });
         }
     });
+});
+
+app.get("/auth/admin", (req, res) => {
+    res.render("admin", {message: ""});
+});
+
+app.post("/auth/admin", (req, res) => {
+    const admin = new User({
+        username: req.body.username,
+        password: req.body.password
+    });
+
+    req.login(admin, (err) => {
+        if(err) {
+            console.log(err);
+            res.redirect("/auth/admin");
+        } else {
+            User.findOne({"username": req.user.username}, (err, foundUser) => {
+                console.log(foundUser.role);
+                if(foundUser.role != "admin") {
+                    res.render("admin", {message: "You are not registered as admin."});
+                } else {
+                    passport.authenticate("local")(req, res, function() {
+                        res.redirect("/auth/admin/post");
+                    });
+                }
+            });
+        }
+    });
+});
+
+app.get("/auth/admin/post", (req, res) => {
+    if(req.isAuthenticated() && req.user.role == "admin") {
+        Post.find({}, (err, foundPost) => {
+            if(err) {
+                console.log(err.message);
+            } else {
+                res.render("result", {posts: foundPost});
+            }
+        });
+    } else {
+        res.redirect("/auth/admin");
+    }
+});
+
+app.get("/auth/admin/users", (req, res) => {
+    if(req.isAuthenticated() && req.user.role == "admin") {
+        Post.find({}, (err, foundPost) => {
+            if(err) {
+                console.log(err.message);
+            } else {
+                res.render("result", {posts: foundPost});
+            }
+        });
+    } else {
+        res.redirect("/auth/admin");
+    }
 });
 
 app.get("/message", (req, res) => {
@@ -300,6 +303,8 @@ app.post("/failure", (req, res) => {
     res.redirect("/");
 });
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log("Server is running on port: 3000");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port: ${PORT}`);
 });
