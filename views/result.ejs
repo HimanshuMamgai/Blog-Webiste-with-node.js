@@ -1,18 +1,23 @@
 <%- include('partials/header'); -%>
 
 <div class="container p-5 d-block m-auto">
-    <table class="p-2 border-5 border-success">
-        <tr class="text-center border">
-            <th class="border"><%= fhd %></th>
-            <th class="border"><%= shd %></th>
-            <th class="border"><%= thd %></th>
-            <th class="border" colspan="2">Action</th>
-        </tr>
-        <% data.forEach((post) => { %>
-            <tr class="border text-center">
-                <td class="border px-3"><%= post.title %><%= post.username %></td>
-                <td class="border px-3"><%= post.date %><%= post.email %></td>
-                <td class="border px-3">
+    <table class="table p-2">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col"><%= fhd %></th>
+                <th scope="col"><%= shd %></th>
+                <th scope="col"><%= thd %></th>
+                <th scope="col" class="text-center" colspan="2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% data.forEach((post, index) => { %>
+            <tr>
+                <th scope="row" class="border"><%= index+1 %></td>
+                <td><%= post.title %><%= post.username %></td>
+                <td><%= post.date %><%= post.email %></td>
+                <td>
                     <form action="/auth/admin/users" method="get">
                         <button type="submit" class="admin-btn">
                             <%= post.author %><%= post.role %>
@@ -20,7 +25,7 @@
                     </form>
                 </td>
                 <!-- Delete Button -->
-                <td class="border px-3">
+                <td class="border px-3 text-center">
                     <form action="/delete/<%= link %>/<%=post._id%>" method="post">
                         <button type="submit" class="admin-btn">
                             <i class="fa fa-trash-o del"></i>
@@ -28,7 +33,7 @@
                     </form>
                 </td>
                 <!-- Edit Button -->
-                <td class="border px-3">
+                <td class="border px-3 text-center">
                     <form action="/edit/<%= link %>/<%=post._id%>" method="post">
                         <button type="submit" class="admin-btn">
                             <i class="fa fa-pencil edit"></i>
@@ -37,6 +42,7 @@
                 </td>
             </tr>
         <% }); %>
+        </tbody>
     </table>
 </div>
 
