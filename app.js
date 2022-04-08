@@ -95,7 +95,7 @@ app.post("/contact", (req, res) => {
 app.get("/compose", (req, res) => {
     if(req.isAuthenticated()) {
         console.log(req.user.username);
-        res.render("compose");
+        res.render("compose", {title: "", content: ""});
     } else {
         res.redirect("/login");
     }
@@ -183,7 +183,6 @@ app.get("/auth/google",
 app.get("/auth/google/compose", 
 passport.authenticate("google", { failureRedirect: "/login" }),
 function(req, res) {
-    // Successful authentication, redirect secret.
     res.redirect("/compose");
 });
 
@@ -267,7 +266,7 @@ app.get("/auth/admin/post", (req, res) => {
             if(err) {
                 console.log(err.message);
             } else {
-                res.render("result", {posts: foundPost});
+                res.render("result", {data: foundPost, fhd: "Title", shd: "Date", thd: "User", link: "post"});
             }
         });
     } else {
@@ -277,11 +276,11 @@ app.get("/auth/admin/post", (req, res) => {
 
 app.get("/auth/admin/users", (req, res) => {
     if(req.isAuthenticated() && req.user.role == "admin") {
-        Post.find({}, (err, foundPost) => {
+        User.find({}, (err, foundUsers) => {
             if(err) {
                 console.log(err.message);
             } else {
-                res.render("result", {posts: foundPost});
+                res.render("result", {data: foundUsers, fhd: "Username", shd: "Email", thd: "Role", link: "user"});
             }
         });
     } else {
@@ -289,10 +288,54 @@ app.get("/auth/admin/users", (req, res) => {
     }
 });
 
+// delete route for post
+app.post("/delete/post/:id", (req, res) => {
+    const requestedId = req.params.id;
+    Post.findByIdAndDelete({_id: requestedId}, (err, foundPost) => {
+        if(err) {
+            console.log(err.message);
+        } else {
+            console.log("Post deleted successfully.");
+            res.redirect("/auth/admin/post");
+        }
+    });
+});
+
+// delete route for user
+app.post("/delete/user/:id", (req, res) => {
+    const requestedId = req.params.id;
+    User.findByIdAndDelete({_id: requestedId}, (err, foundUser) => {
+        if(err) {
+            console.log(err.message);
+        } else {
+            console.log("User deleted successfully.");
+            res.redirect("/auth/admin/users");
+        }
+    });
+});
+
+app.post("/edit/post/:id", (req, res) => {
+    const requestedId = req.params.id;
+    let day = date.getDate();
+    Post.findByIdAndUpdate({"_id": requestedId}, (err, foundUser) => {
+        console.log(foundUser.title);
+    }, {$set: {
+        date: day,
+        title: req.body.title,
+        content: req.body.content,
+        author: req.user.username
+    }}, (err) => {
+        if(err) {
+            console.log(err.message);
+        } else {
+            console.log("Post updated sucessfully!");
+            res.redirect("/auth/admin/post");
+        }
+    });
+});
+
 app.get("/message", (req, res) => {
-
     res.sendFile(__dirname + "/message.html");
-
 });
 
 app.post("/message", (req, res) => {

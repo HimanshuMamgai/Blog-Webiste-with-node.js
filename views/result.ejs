@@ -3,22 +3,38 @@
 <div class="container p-5 d-block m-auto">
     <table class="p-2 border-5 border-success">
         <tr class="text-center border">
-            <th class="border">Title</th>
-            <th class="border">Date</th>
-            <th class="border">User</th>
+            <th class="border"><%= fhd %></th>
+            <th class="border"><%= shd %></th>
+            <th class="border"><%= thd %></th>
             <th class="border" colspan="2">Action</th>
         </tr>
-        <% posts.forEach((post) => { %>
+        <% data.forEach((post) => { %>
             <tr class="border text-center">
-                <td class="border px-3"><%= post.title %></td>
-                <td class="border px-3"><%= post.date %></td>
-                <td class="border px-3"><%= post.author %></td>
+                <td class="border px-3"><%= post.title %><%= post.username %></td>
+                <td class="border px-3"><%= post.date %><%= post.email %></td>
                 <td class="border px-3">
-                    <a href="/delete">
-                        <i class="fa fa-trash-o del"></i>
-                    </a>
+                    <form action="/auth/admin/users" method="get">
+                        <button type="submit" class="admin-btn">
+                            <%= post.author %><%= post.role %>
+                        </button>
+                    </form>
                 </td>
-                <td class="border px-3"><i class="fa fa-pencil edit"></i></td>
+                <!-- Delete Button -->
+                <td class="border px-3">
+                    <form action="/delete/<%= link %>/<%=post._id%>" method="post">
+                        <button type="submit" class="admin-btn">
+                            <i class="fa fa-trash-o del"></i>
+                        </button>
+                    </form>
+                </td>
+                <!-- Edit Button -->
+                <td class="border px-3">
+                    <form action="/edit/<%= link %>/<%=post._id%>" method="post">
+                        <button type="submit" class="admin-btn">
+                            <i class="fa fa-pencil edit"></i>
+                        </button>
+                    </form>
+                </td>
             </tr>
         <% }); %>
     </table>

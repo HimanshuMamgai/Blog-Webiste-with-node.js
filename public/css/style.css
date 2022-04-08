@@ -117,7 +117,9 @@
     background-image: linear-gradient(to bottom, #3c873a, rgb(231, 228, 228));
 }
 
-i {
+.admin-btn {
+    border: none;
+    background-color: #fff;
     cursor: pointer;
 }
 

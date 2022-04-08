@@ -10,11 +10,13 @@
     </div>
     <div class="mb-3">
       <label for="InputTitle" class="form-label">Title</label>
-      <input type="text" name="title" class="form-control" id="InputTitle" placeholder="Enter your post title here" required>
+      <input type="text" name="title" class="form-control" id="InputTitle" value="<%= title %>" placeholder="Enter your post title here" required>
     </div>
     <div class="mb-3">
         <label for="InputContent" class="form-label">Content</label>
-        <textarea class="form-control" name="content" id="InputContent" rows="7" placeholder="Type your post here..."></textarea>
+        <textarea class="form-control" name="content" id="InputContent" rows="7" placeholder="Type your post here...">
+        <%= content %>
+        </textarea>
     </div>
     <button type="submit" class="btn btn-success mb-3">Publish</button>
 </form>
