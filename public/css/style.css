@@ -155,4 +155,7 @@
     #register-form-container {
         width: auto;
     }
+    #other-post-container {
+        display: none;
+    }
 }
