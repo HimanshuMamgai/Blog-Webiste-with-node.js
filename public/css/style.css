@@ -12,8 +12,7 @@
 }
 
 .displayImage {
-    width: 20vw;
-    float: left;
+    width: 50vw;
 }
 
 #display-post-heading {
@@ -136,8 +135,7 @@
         margin: auto;
     }
     .displayImage {
-        width: 40vw;
-        float: none;
+        width: 100vw;
     }
     .uploadedImage {
         width: 60vw;
@@ -155,7 +153,7 @@
     #register-form-container {
         width: auto;
     }
-    #other-post-container {
+    #popular-post-container {
         display: none;
     }
 }
