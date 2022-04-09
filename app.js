@@ -95,7 +95,7 @@ app.post("/contact", (req, res) => {
 app.get("/compose", (req, res) => {
     if(req.isAuthenticated()) {
         console.log(req.user.username);
-        res.render("compose", {title: "", content: ""});
+        res.render("compose");
     } else {
         res.redirect("/login");
     }
@@ -316,20 +316,59 @@ app.post("/delete/user/:id", (req, res) => {
 
 app.post("/edit/post/:id", (req, res) => {
     const requestedId = req.params.id;
-    let day = date.getDate();
-    Post.findByIdAndUpdate({"_id": requestedId}, (err, foundUser) => {
-        console.log(foundUser.title);
-    }, {$set: {
-        date: day,
-        title: req.body.title,
-        content: req.body.content,
-        author: req.user.username
-    }}, (err) => {
+    Post.findById({"_id": requestedId}, (err, foundPost) => {
         if(err) {
             console.log(err.message);
         } else {
-            console.log("Post updated sucessfully!");
+            res.render("update", {id: foundPost._id, title: foundPost.title, content: foundPost.content});
+        }
+    });
+});
+
+app.post("/update/post/:id", (req, res) => {
+    const requestedId = req.params.id;
+    let day = date.getDate();
+    Post.findByIdAndUpdate({_id: requestedId}, {$set:{
+        title: req.body.title,
+        content: req.body.content,
+        date: day,
+        author: req.user.username
+    }}, (err, msg) => {
+        if(err) {
+            console.log(err.message);
+        } else {
             res.redirect("/auth/admin/post");
+        }
+    });
+});
+
+app.post("/edit/user/:id", (req, res) => {
+    const requestedId = req.params.id;
+    User.findById({"_id": requestedId}, (err, foundUser) => {
+        if(foundUser.role == "admin") {
+            if(foundUser.username == "Himanshu") {
+                res.redirect("/auth/admin/users");
+            } else {
+                User.findByIdAndUpdate({_id: requestedId}, {$set:{
+                    role: "basic"
+                }}, (err, msg) => {
+                    if(err) {
+                        console.log(err.message);
+                    } else {
+                        res.redirect("/auth/admin/users");
+                    }
+                });
+            }
+        } else {
+            User.findByIdAndUpdate({_id: requestedId}, {$set:{
+                role: "admin"
+            }}, (err, msg) => {
+                if(err) {
+                    console.log(err.message);
+                } else {
+                    res.redirect("/auth/admin/users");
+                }
+            });
         }
     });
 });

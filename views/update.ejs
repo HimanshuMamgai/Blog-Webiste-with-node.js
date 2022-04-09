@@ -1,23 +1,27 @@
 <%- include('partials/header') -%>
 
-<div class="container my-3">
-<h1 class="text-center text-success">Compose</h1>
+<div class="container my-3 ">
+<h1 class="text-center text-success">Update</h1>
 <hr>
-<form action="/compose" method="post" enctype="multipart/form-data">
+<form action="/update/post/<%= id %>" method="post" enctype="multipart/form-data">
     <div class="mb-3">
       <label for="InputFile" class="form-label">Image</label>
       <input type="file" name="image" class="form-control">
     </div>
     <div class="mb-3">
       <label for="InputTitle" class="form-label">Title</label>
-      <input type="text" name="title" class="form-control" id="InputTitle" placeholder="Enter your post title here" required>
+      <input type="text" name="title" class="form-control" id="InputTitle" value="<%= title %>" placeholder="Enter your post title here" required>
     </div>
     <div class="mb-3">
         <label for="InputContent" class="form-label">Content</label>
         <textarea class="form-control" name="content" id="InputContent" rows="7" placeholder="Type your post here...">
+        <%= content %>
         </textarea>
     </div>
-    <button type="submit" class="btn btn-success mb-3">Publish</button>
+    <button type="submit" class="btn btn-success mb-3">Update</button>
+    <form action="auth/admin/post">
+      <button type="submit" class=" mb-0 ms-2 btn btn-danger">Cancel</button>
+    </form>
 </form>
 </div>
 
