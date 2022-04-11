@@ -105,7 +105,6 @@
 }
 
 #error-message {
-    color: rgb(139, 25, 25);
     float: left;
 }
 #register-form-container {
@@ -128,6 +127,11 @@
 
 .edit {
     color: green;
+}
+
+#fg-pswd {
+    display: flex;
+    justify-content: flex-end;
 }
 
 @media only screen and (max-width: 750px) {

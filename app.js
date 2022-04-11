@@ -3,6 +3,7 @@ const express = require('express');
 const https = require('https');
 const mongoose = require('mongoose');
 const upload = require("express-fileupload");
+const sharp = require('sharp');
 const date = require(__dirname + "/date.js");
 const session = require("express-session");
 const passport = require("passport");
@@ -59,7 +60,11 @@ passport.use(new GoogleStrategy({
 // Home page
 app.get("/", (req, res) => {
     Post.find({}, (err, posts) => {
-        res.render("home", {posts: posts});
+        if(err) {
+            console.log(err.message);
+        } else {
+            res.render("home", {posts: posts});
+        }
     });
 });
 
@@ -97,16 +102,17 @@ app.get("/compose", (req, res) => {
         console.log(req.user.username);
         res.render("compose");
     } else {
-        res.redirect("/login");
+        res.render("login", {message: "Please login to continue"});
     }
 });
 
-app.post("/compose", (req, res) => {
+app.post("/compose", async (req, res) => {
     let day = date.getDate();
 
     if(req.files) {
+        let imageData = await sharp(req.files.image.data).resize(500, 800).rotate().toBuffer();
         const post = new Post({
-            img: req.files.image.data.toString("base64"),
+            img: imageData.toString("base64"),
             title : req.body.title,
             date : day,
             content : req.body.content,
@@ -123,9 +129,9 @@ app.get("/posts/:postId", (req, res) => {
     const requestPostId = req.params.postId;
     Post.findOne({_id: requestPostId}, (err, post) => {
         if(err) throw err;
-        Post.find({ _id: { $nin: [requestPostId] }}, (err, posts) => { //to exclude only one document
+        Post.find({ _id: { $nin: [requestPostId] }}, async (err, posts) => { //to exclude only one document
             if(err) throw err;
-            res.render("post", {image: post.img,title : post.title, date : post.date, author: post.author, content : post.content, posts : posts});
+            res.render("post", {image: post.img, title : post.title, date : post.date, author: post.author, content : post.content, posts : posts});
         });
     });
 });
@@ -181,13 +187,13 @@ app.get("/auth/google",
     passport.authenticate("google", { scope: ["profile"] }));
 
 app.get("/auth/google/compose", 
-passport.authenticate("google", { failureRedirect: "/login" }),
-function(req, res) {
-    res.redirect("/compose");
+    passport.authenticate("google", { failureRedirect: "/login" }),
+    function(req, res) {
+        res.redirect("/compose");
 });
 
 app.get("/login", (req, res) => {
-    res.render("login");
+    res.render("login", {message: ""});
 });
 
 app.get("/register", (req, res) => {
@@ -222,7 +228,7 @@ app.post("/login", (req, res) => {
                 if(!foundUser) {
                     res.redirect("/register");
                 } else {
-                    passport.authenticate("local")(req, res, function() {
+                    passport.authenticate("local", {failureRedirect: "/login"})(req, res, () => {
                         res.redirect("/compose");
                     });
                 }
@@ -367,6 +373,35 @@ app.post("/edit/user/:id", (req, res) => {
                     console.log(err.message);
                 } else {
                     res.redirect("/auth/admin/users");
+                }
+            });
+        }
+    });
+});
+
+app.get("/forgot", (req, res) => {
+    res.render("forgot");
+});
+
+app.post("/forgot", (req, res) => {
+    User.findOne({"username": req.body.username}, (err, foundUser) => {
+        if(err) {
+            console.log(err);
+        } else {
+            foundUser.setPassword(req.body.password, (err, user) => {
+                if(err) {
+                    console.log(err);
+                } else {
+                    User.findByIdAndUpdate({_id: user._id}, {$set: {
+                        hash: user.hash,
+                        salt: user.salt
+                    }}, (err, msg) => {
+                        if(err) {
+                            console.log(err.message);
+                        } else {
+                            res.redirect("/login");
+                        }
+                    });
                 }
             });
         }

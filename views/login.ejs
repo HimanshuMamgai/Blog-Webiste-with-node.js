@@ -8,18 +8,20 @@
         </div>
         <div class="col-md-5">
             <div class="container p-3" id="login-container">
+                <span id="error-message" class="mb-2 text-danger"><strong><%= message %></strong></span>
                 <form action="/login" method="post">
                     <input type="text" name="username" class="form-control mb-3" placeholder="Enter username">
-                    <input type="password" name="password" class="form-control" placeholder="Password">
+                    <input type="password" name="password" class="form-control mb-1" placeholder="Password" required>
+                    <span id="fg-pswd"><a href="/forgot">Forgot Password?</a></span>
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn mt-3" id="login-btn">Log In</button>
+                        <button type="submit" class="btn mt-2" id="login-btn">Log In</button>
                     </div>
                 </form>
                 <h5 class="text-center">or</h5>
                 <form action="/auth/google">
                     <div class="d-grid gap-2 col-6 mx-auto">
                         <button type="submit" class="btn btn-danger">
-                            <i class="fab fa-google"></i> LogIn with Google
+                            <i class="fab fa-google"></i> Log in with Google
                         </button>
                     </div>
                 </form>
