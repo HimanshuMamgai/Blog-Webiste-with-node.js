@@ -4,12 +4,12 @@ const https = require('https');
 const mongoose = require('mongoose');
 const upload = require("express-fileupload");
 const sharp = require('sharp');
+const nodemailer = require("nodemailer");
 const date = require(__dirname + "/date.js");
 const session = require("express-session");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("./models/User");
-const Contact = require("./models/Contact");
 const Post = require("./models/Post");
 
 const app = express();
@@ -61,7 +61,7 @@ passport.use(new GoogleStrategy({
 app.get("/", (req, res) => {
     Post.find({}, (err, posts) => {
         if(err) {
-            console.log(err.message);
+            console.log(err);
         } else {
             res.render("home", {posts: posts});
         }
@@ -83,17 +83,30 @@ app.get(["/contact", "/posts/contact"], (req, res) => {
 });
 
 app.post("/contact", (req, res) => {
-    //new document
-    const contact = new Contact({
-        email : req.body.email,
-        subject : req.body.subject,
-        message : req.body.message
-    });
-
-    contact.save((err) => {
-        if(err) throw err;
-        res.sendFile(__dirname + "/message.html");
-    });
+    
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'himanshum50360@gmail.com',
+          pass: process.env.EMAIL_PASSWORD
+        }
+      });
+      
+      var mailOptions = {
+        from: req.body.email,
+        to: 'himanshum50360@gmail.com',
+        subject: req.body.subject,
+        html: `<p>Mail sent from: ${req.body.email} </p> <br><div style="white-space: pre; border: 5px solid black; border-radius: 8px; padding: 10px; margin-top: 3px;">${req.body.message}</div>`
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+          res.sendFile(__dirname + "/message.html");
+        }
+      });
 });
 
 /* Compose post */
@@ -408,12 +421,8 @@ app.post("/forgot", (req, res) => {
     });
 });
 
-app.get("/message", (req, res) => {
-    res.sendFile(__dirname + "/message.html");
-});
-
 app.post("/message", (req, res) => {
-    res.redirect("/");
+    res.redirect("/contact");
 });
 
 app.post("/failure", (req, res) => {
