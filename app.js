@@ -96,7 +96,7 @@ app.post("/contact", (req, res) => {
         from: req.body.email,
         to: 'himanshum50360@gmail.com',
         subject: req.body.subject,
-        html: `<p>Mail sent from: ${req.body.email} </p> <br><div style="white-space: pre; border: 5px solid black; border-radius: 8px; padding: 10px; margin-top: 3px;">${req.body.message}</div>`
+        html: `<p>Mail sent from: ${req.body.email}</p><br><div style="white-space: pre;">${req.body.message}</div>`
       };
       
       transporter.sendMail(mailOptions, function(error, info){
@@ -266,13 +266,16 @@ app.post("/auth/admin", (req, res) => {
             res.redirect("/auth/admin");
         } else {
             User.findOne({"username": req.user.username}, (err, foundUser) => {
-                console.log(foundUser.role);
-                if(foundUser.role != "admin") {
-                    res.render("admin", {message: "You are not registered as admin."});
+                if(!foundUser) {
+                    res.redirect("/register");
                 } else {
-                    passport.authenticate("local")(req, res, function() {
-                        res.redirect("/auth/admin/post");
-                    });
+                    if(foundUser.role != "admin") {
+                        res.render("admin", {message: "You are not registered as admin."});
+                    } else {
+                        passport.authenticate("local")(req, res, function() {
+                            res.redirect("/auth/admin/post");
+                        });
+                    }
                 }
             });
         }
@@ -323,12 +326,22 @@ app.post("/delete/post/:id", (req, res) => {
 // delete route for user
 app.post("/delete/user/:id", (req, res) => {
     const requestedId = req.params.id;
-    User.findByIdAndDelete({_id: requestedId}, (err, foundUser) => {
+    User.findById({"_id": requestedId}, (err, foundUser) => {
         if(err) {
             console.log(err.message);
         } else {
-            console.log("User deleted successfully.");
-            res.redirect("/auth/admin/users");
+            if(foundUser.username == "Himanshu") {
+                res.redirect("/auth/admin/users");
+            } else {
+                User.findByIdAndDelete({_id: requestedId}, (err, foundUser) => {
+                    if(err) {
+                        console.log(err.message);
+                    } else {
+                        console.log("User deleted successfully.");
+                        res.redirect("/auth/admin/users");
+                    }
+                });
+            }
         }
     });
 });
