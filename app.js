@@ -272,7 +272,7 @@ app.post("/auth/admin", (req, res) => {
                     if(foundUser.role != "admin") {
                         res.render("admin", {message: "You are not registered as admin."});
                     } else {
-                        passport.authenticate("local", {failureRedirect: "/admin"})(req, res, function() {
+                        passport.authenticate("local", {failureRedirect: "/auth/admin"})(req, res, function() {
                             res.redirect("/auth/admin/post");
                         });
                     }
