@@ -4,13 +4,14 @@ const https = require('https');
 const mongoose = require('mongoose');
 const upload = require("express-fileupload");
 const sharp = require('sharp');
-const nodemailer = require("nodemailer");
 const date = require(__dirname + "/date.js");
 const session = require("express-session");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("./models/User");
 const Post = require("./models/Post");
+const homeRoute = require("./routes/home.js");
+const contactRoute = require("./routes/contact.js");
 
 const app = express();
 
@@ -58,15 +59,7 @@ passport.use(new GoogleStrategy({
 ));
 
 // Home page
-app.get("/", (req, res) => {
-    Post.find({}, (err, posts) => {
-        if(err) {
-            console.log(err);
-        } else {
-            res.render("home", {posts: posts});
-        }
-    });
-});
+app.get("/", homeRoute);
 
 /* About Page */
 app.get(["/about", "/posts/about"], (req, res) => {
@@ -82,32 +75,7 @@ app.get(["/contact", "/posts/contact"], (req, res) => {
     res.render("contact");
 });
 
-app.post("/contact", (req, res) => {
-    
-    var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'himanshum50360@gmail.com',
-          pass: process.env.EMAIL_PASSWORD
-        }
-      });
-      
-      var mailOptions = {
-        from: req.body.email,
-        to: 'himanshum50360@gmail.com',
-        subject: req.body.subject,
-        html: `<p>Mail sent from: ${req.body.email}</p><br><div style="white-space: pre;">${req.body.message}</div>`
-      };
-      
-      transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-          res.sendFile(__dirname + "/message.html");
-        }
-      });
-});
+app.post("/contact", contactRoute);
 
 /* Compose post */
 app.get("/compose", (req, res) => {
