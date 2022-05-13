@@ -1,9 +1,7 @@
 require("dotenv").config();
 const express = require('express');
-const https = require('https');
 const mongoose = require('mongoose');
 const upload = require("express-fileupload");
-const sharp = require('sharp');
 const date = require(__dirname + "/date.js");
 const session = require("express-session");
 const passport = require("passport");
@@ -12,6 +10,9 @@ const User = require("./models/User");
 const Post = require("./models/Post");
 const homeRoute = require("./routes/home.js");
 const contactRoute = require("./routes/contact.js");
+const composeRoute = require("./routes/compose.js");
+const postRoute = require("./routes/post.js");
+const subscribeRoute = require("./routes/subscribe.js");
 
 const app = express();
 
@@ -71,93 +72,19 @@ app.get("/message", (req, res) => {
 });
 
 /* Contact Page */
-app.get(["/contact", "/posts/contact"], (req, res) => {
-    res.render("contact");
-});
+app.get(["/contact", "/posts/contact"], contactRoute);
 
 app.post("/contact", contactRoute);
 
 /* Compose post */
-app.get("/compose", (req, res) => {
-    if(req.isAuthenticated()) {
-        console.log(req.user.username);
-        res.render("compose");
-    } else {
-        res.render("login", {message: "Please login to continue"});
-    }
-});
+app.get("/compose", composeRoute);
 
-app.post("/compose", async (req, res) => {
-    let day = date.getDate();
+app.post("/compose", composeRoute);
 
-    if(req.files) {
-        let imageData = await sharp(req.files.image.data).resize(500, 800).rotate().toBuffer();
-        const post = new Post({
-            img: imageData.toString("base64"),
-            title : req.body.title,
-            date : day,
-            content : req.body.content,
-            author: req.user.username
-        });
-        post.save((err) => {
-            if(err) throw err;
-            res.redirect("/");
-        });
-    }
-});
-
-app.get("/posts/:postId", (req, res) => {
-    const requestPostId = req.params.postId;
-    Post.findOne({_id: requestPostId}, (err, post) => {
-        if(err) throw err;
-        Post.find({ _id: { $nin: [requestPostId] }}, async (err, posts) => { //to exclude only one document
-            if(err) throw err;
-            res.render("post", {image: post.img, title : post.title, date : post.date, author: post.author, content : post.content, posts : posts});
-        });
-    });
-});
+app.get("/posts/:postId", postRoute);
 
 /* Newsletter */
-app.post("/subscribe", (req, res) => {
-    let userEmail = req.body.email;
-
-    const data = {
-        members : [
-            {
-                email_address : userEmail,
-                status : "subscribed"
-            }
-        ]
-    };
-
-    console.log(data);
-
-    const jsonData = JSON.stringify(data);
-
-    const url = process.env.MAIL_CHIMP_URI;
-
-    const options = {
-        method : "POST",
-        auth : "himanshu1:" + process.env.MAIL_CHIMP_API_KEY
-    }
-
-    const request = https.request(url, options, (response) => {
-        if(response.statusCode == 200) {
-            res.render("success");
-        } else {
-            res.render("failure", {message : "Something went wrong!"});
-        }
-
-        response.on("data", (data) => {
-            console.log(JSON.parse(data)); //to get data on console
-        });
-
-    });
-
-    request.write(jsonData); //to send data on mailchimp
-    request.end();
-
-});
+app.post("/subscribe", subscribeRoute);
 
 app.get("/logout", (req, res) => {
     req.logOut();

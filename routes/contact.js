@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const nodemailer = require("nodemailer");
 
+router.get("/contact", (req, res) => {
+  res.render("contact");
+});
+
 router.post("/contact", (req, res) => {
     
     var transporter = nodemailer.createTransport({
